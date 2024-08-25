@@ -4,4 +4,3 @@ branches:
     regex: main
   pull-request:
     tag: pr
-next-version: 1.0.0
