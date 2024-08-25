@@ -1,0 +1,6 @@
+mode: Mainline
+branches:
+  master:
+    regex: main
+  pull-request:
+    tag: pr

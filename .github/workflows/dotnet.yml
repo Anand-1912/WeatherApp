@@ -4,23 +4,41 @@ on: workflow_dispatch
 env:
   DOTNET_VERSION: "6.0.x"
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup .NET
+      - name: Setup .NET 📦
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install dependencies
+      - name: Install dependencies 📂
         run: dotnet restore ./WeatherApp.sln
 
-      - name: Build
+      - name: Build 🧱
         run: dotnet build ./WeatherApp.sln --configuration Release --no-restore
 
       - name: Test 🧪
         run: dotnet test ./WeatherApp.sln --configuration Release --no-build
+
+  package-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.11
+        with:
+          versionSpec: "5.x"
+
+      - name: Use GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.11
+        with:
+          useConfigFile: true
+          configFilePath: GitVersion.yml
+
+      - name: What version
+        run: echo ${{ steps.gitversion.outputs.semVer }}
