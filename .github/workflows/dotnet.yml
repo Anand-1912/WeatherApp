@@ -57,7 +57,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build 🧱
-        run: docker build -f ./src/WeatherApp.Api/Dockerfile -t anand1912/weatherapp:${{ steps.gitversion.outputs.majorMinorPatch }}
+        working-directory: ./src/WeatherApp.Api
+        run: docker build -t anand1912/weatherapp:${{ steps.gitversion.outputs.majorMinorPatch }} .
 
       - name: Docker Push ⬆️
         run: docker push anand1912/weatherapp:${{ steps.gitversion.outputs.majorMinorPatch }}
